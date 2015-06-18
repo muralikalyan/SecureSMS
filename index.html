@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="">
+<meta name="author" content="">
+<title>SMS</title>
+<link href="css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="css/font-awesome-4.3.0/css/font-awesome.min.css">
+<link href="css/sidebar/sidebar.css" rel="stylesheet">
+<link href="css/sidebar/style.css" rel="stylesheet">
+<link href="css/main.css" rel="stylesheet">
+</head>
+<body>
+
+
+
+
+  <!-- Fixed navbar -->
+  <div class="navbar navbar-static navbar-default navbar-fixed-top">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a href="#" class="navbar-toggle navbar-toggle-edit toggle-left hidden-md hidden-lg" data-toggle="sidebar" id="toggle" data-target=".sidebar-left">
+           <i class="fa fa-bars"></i>
+         </a>
+        <a class="navbar-brand" href="#">Messaging</a>
+      </div>
+        
+    </div>
+  </div>
+  
+  <!-- Begin page content -->
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-xs-7 col-sm-3 col-md-3 sidebar sidebar-left sidebar-animate sidebar-md-show">
+        <ul class="nav navbar-stacked">
+          <li class="active"><a href="#" id="sidebar-compose" data-toggle="sidebar" data-target=".sidebar-left">Compose</a></li>
+          <li class="active"><a href="#" id="sidebar-inbox" data-toggle="sidebar" data-target=".sidebar-left">Inbox</a></li>
+          <li><a href="#sent" id="sidebar-sent" data-toggle="sidebar" data-target=".sidebar-left">Sent</a></li>
+          <li><a href="#draft" id="sidebar-draft" data-toggle="sidebar" data-target=".sidebar-left">Draft</a></li>
+          <li><a href="#trash" id="sidebar-trash" data-toggle="sidebar" data-target=".sidebar-left">Trash</a></li>
+        </ul>
+      </div>
+      <div class="main col-md-9 col-md-offset-3">
+        <div class="page-header">
+              <h4 id="title">Compose</h4>
+              <hr>
+             <div id="compose">
+                    <div class="row">
+			            <div class="col-md-12 ">
+			               <form action="" method="post">
+			                  <div class="form-group">
+			                    <input type="email" id="Email" class="form-control" placeholder="To" required="required" autofocus="autofocus"/>
+			                  </div>
+			                  
+			                  <div class="form-group">
+			                   <textarea class="form-control" id="message" name="message" placeholder="Type Here" rows="3"></textarea>
+			                  </div>
+			                  
+			                  <button class="btn btn-sm btn-primary btn-block" type="submit">Sign in</button>
+			               </form>
+			            </div>
+			        </div>
+			   </div><!-- /compose --> 
+			   
+			   
+			   
+			   <div id="inbox">
+			       <div class="row">
+			           <div class="col-md-12">
+			              <div class="list-group">
+						       <a href="#" class="list-group-item">
+						           <h4 class="list-group-item-heading">Ramesh</h4>
+						           <p class="list-group-item-text">Hello</p>
+						       </a>
+						       <a href="#" class="list-group-item">
+						           <h4 class="list-group-item-heading">Kalyan Sir</h4>
+						           <p class="list-group-item-text">Bootstrap is a powerful front-end framework for faster and easier web development. </p>
+						       </a>
+						       <a href="#" class="list-group-item">
+						           <h4 class="list-group-item-heading">Pradhan Sir</h4>
+						           <p class="list-group-item-text">CSS stands for Cascading Style Sheet.</p>
+						       </a>
+                         </div>
+			          </div>
+			       </div>
+			   </div><!-- /inbox -->
+			   
+			   <div id="sent">
+			        <div class="row">
+			           <div class="col-md-12">
+			              <div class="list-group">
+						        <div class="list-group">
+						       <a href="#" class="list-group-item">
+						           <h4 class="list-group-item-heading">Ramesh</h4>
+						           <p class="list-group-item-text">Hello</p>
+						       </a>
+						       <a href="#" class="list-group-item">
+						           <h4 class="list-group-item-heading">Kalyan Sir</h4>
+						           <p class="list-group-item-text">Bootstrap is a powerful front-end framework for faster and easier web development. </p>
+						       </a>
+						       <a href="#" class="list-group-item">
+						           <h4 class="list-group-item-heading">Pradhan Sir</h4>
+						           <p class="list-group-item-text">CSS stands for Cascading Style Sheet.</p>
+						       </a>
+                            </div>
+                       </div>
+			          </div>
+			       </div>
+			   
+			   </div><!-- /sent -->
+			   
+			   <div id="draft">
+			        <div class="row">
+			           <div class="col-md-12">
+			              <div class="list-group">
+						       <div class="list-group">
+						       <a href="#" class="list-group-item">
+						           <h4 class="list-group-item-heading">Ramesh</h4>
+						           <p class="list-group-item-text">Hello</p>
+						       </a>
+						       <a href="#" class="list-group-item">
+						           <h4 class="list-group-item-heading">Kalyan Sir</h4>
+						           <p class="list-group-item-text">Bootstrap is a powerful front-end framework for faster and easier web development. </p>
+						       </a>
+						       <a href="#" class="list-group-item">
+						           <h4 class="list-group-item-heading">Pradhan Sir</h4>
+						           <p class="list-group-item-text">CSS stands for Cascading Style Sheet.</p>
+						       </a>
+                       </div>
+                       </div>
+			          </div>
+			       </div>
+			   
+			   </div><!-- /draft --> 
+			   
+			       
+			   </div> <!-- /page-header -->
+          </div><!-- /col-md-9 -->
+      </div><!-- /row -->
+   </div><!-- /container-fluid -->
+ 
+      
+      <!-- javascript -->
+      <script src="js/jquery-2.1.3.js"></script>
+      <script src="js/bootstrap.min.js"></script>     
+      <script src="js/sidebar/sidebar.js"></script>  
+      <script src="js/main.js"></script>        
+   
+
+
+
+
+</body>
+</html>
