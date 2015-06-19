@@ -1,0 +1,275 @@
+package com.example.mmm.androidjwk;
+
+import android.annotation.TargetApi;
+import android.content.Context;
+import android.content.res.AssetManager;
+import android.os.Build;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.security.KeyPairGenerator;
+import java.security.interfaces.*;
+import java.text.ParseException;
+import java.util.Date;
+import javax.crypto.*;
+
+import com.nimbusds.jose.*;
+import com.nimbusds.jose.crypto.*;
+import com.nimbusds.jwt.*;
+
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.InputStreamReader;
+import java.io.StringReader;
+import java.math.BigInteger;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.security.Key;
+import java.security.KeyFactory;
+import java.security.KeyPair;
+import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.security.interfaces.RSAPublicKey;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.RSAPrivateKeySpec;
+import java.security.spec.RSAPublicKeySpec;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonReader;
+import javax.json.JsonValue;
+
+import com.nimbusds.jose.EncryptionMethod;
+import com.nimbusds.jose.JOSEException;
+import com.nimbusds.jose.JWEAlgorithm;
+import com.nimbusds.jose.JWEHeader;
+import com.nimbusds.jose.crypto.RSAEncrypter;
+import com.nimbusds.jwt.EncryptedJWT;
+import com.nimbusds.jwt.JWTClaimsSet;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+public class AndroidJWK {
+	
+
+	// static jwk
+public static String getKey1(){
+	String key = "{\"keys\":[{\"d\":\"37b64bf42617a80b3cc51fab59b947d2aed98eee4e7948ab0d3461060f788bd4baef6bf47a22d8c46f70895d9cb3a18be88857dd079ec22b1252a3ebb9a824017e532b7a3450d70c75d869a387dd4bfcc1c32fbd0e57168deade8edeffe49a9faae8d25fb327eff9ca50972efd991c34dd0cbbddd0b9bf4fdc9dde9450662c587ec2318b4156496ae6111453a1450d158b26790fc9dcacdcc7bc552c96eda7290904ee007460e1bc977b0ab6f283827965e0aa889f90b00d764d3c087ea50519d48b54d3f1c1a3e3a51eaad6c494ad6cb38f85068a6f52f8a3c3e08d67352fd418fc70f471bf1888d6a7b7048ed306ca83c32d219865c9412c77bf4c7c8c2c01\",\"e\":\"65537\",\"n\":\"00c24baf0f2d2bad3672a7910fee30a095d53a468286967e42c6fe8f2097af49f648a39153ac2ee6ec9a9ae00afb1cdb44405b8cfcd51ccbb69b60c0a8ac06f16b295e2f7b09d99332da3fdb539c2eea3b417f6bc97b889f2ec5dd421e7f8f04f6603cfe436d3210ce8d99cb76f7109705af281e390f7835507b8e2822a47d115122d10eab6b6f96cbcf7debc6aaa26a2e972a93afa589e6c8bc9ffd852b0fb4c0e4cab5a79a010581936bf58d1cf7f3770e6e5334920f4821343344145e4a00413a7dcb3882c165e079eaa10584b26e4019771a0e384b281f34b5cbacc52f5851d7eca8080e7cc020c15ea14db13017630ee7588e7f6e9fa4778b1ea2d22e1be9\",\"kty\":\"RSA\",\"use\":\"enc\",\"kid\":\"1\"}]}";
+   	return  key;
+}
+
+	// getting jwk from server
+@TargetApi(Build.VERSION_CODES.KITKAT)
+public static String getKey() {
+		
+		System.out.println("INSIDE AndroidJWK Class");
+		
+		String key = null;
+		
+		  try {
+			  String urlParameters  = "uid=mobileapps-nic&kid=1&claim=mobile apps";
+				 byte[] postData       = urlParameters.getBytes( StandardCharsets.UTF_8);
+				 int    postDataLength = postData.length;
+				 String request        = "http://mobileapps.nic.in/nmws/restjwk/rest/JWK";
+				 URL    url            = new URL( request );
+				 HttpURLConnection conn= (HttpURLConnection) url.openConnection();           
+				 conn.setDoOutput( true );
+				 conn.setInstanceFollowRedirects( false );
+				 conn.setRequestMethod( "POST" );
+				 conn.setRequestProperty( "Content-Type", "application/x-www-form-urlencoded"); 
+				 conn.setRequestProperty( "charset", "utf-8");
+				 conn.setRequestProperty( "Content-Length", Integer.toString( postDataLength ));
+				 conn.setUseCaches( false );
+				 
+				 DataOutputStream wr = new DataOutputStream( conn.getOutputStream());
+				 wr.write(postData);
+				 
+			
+					BufferedReader br = new BufferedReader(new InputStreamReader(
+							(conn.getInputStream())));
+			 
+					String output;
+					System.out.println("Output from Server .... \n");
+					while ((output = br.readLine()) != null) {
+						System.out.println("KEY KEY KEY "+output);
+						key =output;
+
+
+					}
+					
+					conn.disconnect();
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+			
+			System.out.println(" +++++++++++++++++++++  Exceptions +++++++++++++++++++++"+e);
+		}
+		  
+    return key;		  
+		 
+   }  // getkey
+		  
+
+
+
+
+  public static void composeClaimList(String fileKey) throws NoSuchAlgorithmException, JOSEException {
+		
+	 String jwtString= "";
+	 Map<String, Key> keyMap = new HashMap<String,Key>();
+	 List<String> claim = Arrays.asList("mobile xxxx apps");
+	 
+	// Compose the JWT claims set
+		JWTClaimsSet jwtClaims = new JWTClaimsSet();
+		jwtClaims.setIssuer("https://moblieapps.nic.in");
+		jwtClaims.setSubject("Encryption With JWK");
+		List<String> aud = new ArrayList<String>();
+		aud.add("https://portal.mobileapps.nic.in");
+		aud.add("https://mobileapps.nic.in/audit");
+		jwtClaims.setAudience(aud);
+		
+		System.out.println("Added Claim : "+claim.get(0));
+		Map<String, Object> data = new HashMap<String, Object>();
+		for (int i = 0; i < claim.size(); i++) {
+			data.put("claim" + i, claim.get(i));
+		}
+		
+		jwtClaims.setCustomClaims(data);
+		// Set expiration in 10 minutes
+		jwtClaims.setExpirationTime(new Date(new Date().getTime() + 1000*60*10));
+		jwtClaims.setNotBeforeTime(new Date());
+		jwtClaims.setIssueTime(new Date());
+		jwtClaims.setJWTID(UUID.randomUUID().toString());
+
+
+		// Request JWT encrypted with RSA-OAEP and 128-bit AES/GCM
+		JWEHeader header = new JWEHeader(JWEAlgorithm.RSA_OAEP, EncryptionMethod.A256GCM);
+		// Create the encrypted JWT object
+		EncryptedJWT jwt = new EncryptedJWT(header, jwtClaims);
+		
+
+		JsonReader jsonReader = Json.createReader(new StringReader(fileKey));
+		JsonObject object = jsonReader.readObject();
+		jsonReader.close();
+		for (final JsonValue v : object.getJsonArray("keys")) {
+			JsonObject keyJson = (JsonObject) v;
+			String kid = keyJson.getString("kid");
+			if (keyJson.containsKey("use")) {
+
+
+				PublicKey key = null;
+				try {
+					key = buildPublicKey(keyJson);
+				} catch (InvalidKeySpecException e) {
+					System.out.println("ERROR  ... Public KEY" +e);
+				} catch (NoSuchAlgorithmException e) {
+					
+					System.out.println("ERROR  ... Public KEY" +e);
+				}
+
+
+
+				
+
+				//************************ Encrypt  ************************
+
+				// Create an encrypter with the specified public RSA key
+				RSAPublicKey pb = (RSAPublicKey) key;
+				RSAEncrypter encrypter = new RSAEncrypter(pb);
+
+				// Do the actual encryption
+				try {
+					jwt.encrypt(encrypter);
+				} catch (JOSEException e) {
+					System.out.println("Exception in encrypt : "+e);				}
+
+				// Serialise to JWT compact form
+					jwtString = jwt.serialize();
+
+				 System.out.println("Encrypted Text : "+ jwtString);
+
+
+				// decrypt
+				PrivateKey pkey = null;
+				try {
+					pkey = builPrivateKey(keyJson);
+				} catch (InvalidKeySpecException e) {
+					e.printStackTrace();
+				}
+				RSAPrivateKey pv = (RSAPrivateKey) pkey;
+				// Create a decrypter with the specified private RSA key
+				RSADecrypter decrypter = new RSADecrypter(pv);
+
+				// Decrypt
+				jwt.decrypt(decrypter);
+
+				JSONObject obj =new JSONObject();
+				try {
+					for(int i =0;i<jwt.getJWTClaimsSet().getCustomClaims().size();i++){
+                        obj.put("claim"+i, jwt.getJWTClaimsSet().getCustomClaim("claim"+i));
+                    }
+				} catch (ParseException e) {
+					e.printStackTrace();
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+
+				JSONObject jsonobject = new JSONObject();
+				try {
+					jsonobject.put("JWE", obj);
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+
+				System.out.println("Decrypted Text "+jsonobject);
+			}
+	    }
+ }
+
+
+
+
+  
+  private static PublicKey buildPublicKey(final JsonObject keyJson) throws InvalidKeySpecException, NoSuchAlgorithmException {
+	    String kty = keyJson.getString("kty");
+	    if ("RSA".equals(kty)) {
+	    	BigInteger modulus = new BigInteger(keyJson.getString("n"),16);
+	    	BigInteger publicExponent = new BigInteger(keyJson.getString("e"));
+
+	    	try {
+	    		return KeyFactory.getInstance("RSA").generatePublic(new RSAPublicKeySpec(modulus, publicExponent));
+			} catch (Exception e) {
+				System.out.println("Exception buildPublicKey "+e);
+			}
+	    	
+	    }
+	    
+	    return null;
+	}
+	
+	private static PrivateKey builPrivateKey(final JsonObject keyJson) throws InvalidKeySpecException, NoSuchAlgorithmException {
+	    String kty = keyJson.getString("kty");
+	    if ("RSA".equals(kty)) {
+	    	BigInteger modulus = new BigInteger(keyJson.getString("n"),16);
+	       	BigInteger privateExponent = new BigInteger(keyJson.getString("d"),16);
+	       	return KeyFactory.getInstance("RSA").generatePrivate( new RSAPrivateKeySpec(modulus, privateExponent));
+	    }
+	    return null;
+	}
+
+
+
+  
+			
+ }
+
